@@ -34,6 +34,7 @@
 }
 
 .foodCell {
+  padding: 2vh;
   background-color: #e7471d;
   border: 1px solid #e7471d;
 }

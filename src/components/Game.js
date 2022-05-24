@@ -13,6 +13,7 @@ const Game = () => {
   }
 
   const [rows, setRows] = useState(initialRows);
+  const [hasEaten, setHasEaten] = useState(false);
 
   const displayRows = rows.map((row) => (
     <div className="boardRow">
@@ -44,10 +45,24 @@ const Game = () => {
 
   window.addEventListener("keydown", changeDirection);
 
+  const foodPosition = () => {
+    let x = Math.round(Math.random() * (height - 0) + 0);
+    let y = Math.round(Math.random() * (height - 0) + 0);
+    return { x, y };
+  };
+
+  const displayFood = () => {
+    const newRows = initialRows;
+    let { x, y } = foodPosition();
+    newRows[x][y] = "f";
+    setRows(newRows);
+  };
+
   return (
     <>
       <div>Hi Welcome to the Snake Game</div>
       {displayRows}
+      <button onClick={displayFood}>Food</button>
     </>
   );
 };
