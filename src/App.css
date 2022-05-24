@@ -38,3 +38,9 @@
   background-color: #e7471d;
   border: 1px solid #e7471d;
 }
+
+.snakeCell {
+  padding: 2vh;
+  background-color: lightgreen;
+  border: 1px solid lightgreen;
+}
