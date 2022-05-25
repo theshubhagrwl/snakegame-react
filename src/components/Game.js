@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "../App.css";
 
 const Game = () => {
@@ -12,13 +12,20 @@ const Game = () => {
     }
   }
 
+  const foodPosition = () => {
+    let x = Math.round(Math.random() * (height - 1) + 0);
+    let y = Math.round(Math.random() * (height - 1) + 0);
+    return { x, y };
+  };
+
   const [rows, setRows] = useState(initialRows);
-  const [hasEaten, setHasEaten] = useState(false);
+  // const [hasEaten, setHasEaten] = useState(false);
   const [snake, setSnake] = useState([
-    { x: 0, y: 0 },
-    { x: 1, y: 0 },
+    { x: 2, y: 3 },
+    { x: 3, y: 3 },
   ]);
   const [direction, setDirection] = useState(null);
+  const [food, setFood] = useState(foodPosition);
 
   const displayRows = rows.map((row) => (
     <div className="boardRow">
@@ -57,17 +64,13 @@ const Game = () => {
 
   window.addEventListener("keydown", changeDirection);
 
-  const foodPosition = () => {
-    let x = Math.round(Math.random() * (height - 1) + 0);
-    let y = Math.round(Math.random() * (height - 1) + 0);
-    return { x, y };
-  };
-
   const displaySnake = () => {
     const newRows = initialRows;
     snake.forEach((cell) => {
       newRows[cell.x][cell.y] = "s";
     });
+    //food info will be lost, so set the food position also
+    newRows[food.x][food.y] = "f";
     setRows(newRows);
   };
 
@@ -79,18 +82,45 @@ const Game = () => {
     if (direction === "left") {
       newSnake.push({ x: snake[0].x, y: (snake[0].y - 1 + width) % width });
     }
-    if (direction === "top") {
+    if (direction === "up") {
       newSnake.push({ x: (snake[0].x - 1 + height) % height, y: snake[0].y });
     }
-    if (direction === "bottom") {
+    if (direction === "down") {
       newSnake.push({ x: (snake[0].x + 1) % height, y: snake[0].y });
     }
     snake.forEach((cell) => {
       newSnake.push(cell);
     });
+    if (snake[0].x === food.x && snake[0].y === food.y) {
+      setFood(foodPosition);
+    } else if (snake.length > 2) {
+      newSnake.pop();
+    } else {
+      console.log("snake moving");
+    }
     setSnake(newSnake);
     displaySnake();
   };
+
+  // useInterval(moveSnake, 100);
+
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
 
   const displayFood = () => {
     const newRows = initialRows;
