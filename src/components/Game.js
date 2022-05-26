@@ -24,7 +24,7 @@ const Game = () => {
     { x: 2, y: 3 },
     { x: 3, y: 3 },
   ]);
-  const [direction, setDirection] = useState(null);
+  const [direction, setDirection] = useState("down");
   const [food, setFood] = useState(foodPosition);
 
   const displayRows = rows.map((row) => (
@@ -102,7 +102,25 @@ const Game = () => {
     displaySnake();
   };
 
-  // useInterval(moveSnake, 100);
+  // const requestRef = useRef();
+  // const prevRef = useRef();
+
+  // const animate = () => {
+  //   if (prevRef.current !== undefined || prevRef.current !== null) {
+  //     // prevRef.current = moveSnake;
+  //     // moveSnake();
+  //     // prevRef.current();
+  //   }
+  //   prevRef.current = moveSnake;
+  //   requestRef.current = requestAnimationFrame(animate);
+  // };
+
+  // useEffect(() => {
+  //   requestRef.current = requestAnimationFrame(animate);
+  //   return () => cancelAnimationFrame(requestRef.current);
+  // }, []);
+
+  useInterval(moveSnake, 200);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();
@@ -117,6 +135,7 @@ const Game = () => {
       }
       if (delay !== null) {
         let id = setInterval(tick, delay);
+        // let id = requestAnimationFrame(tick);
         return () => clearInterval(id);
       }
     }, [delay]);
