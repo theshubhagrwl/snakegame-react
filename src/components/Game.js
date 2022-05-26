@@ -26,6 +26,7 @@ const Game = () => {
   ]);
   const [direction, setDirection] = useState("down");
   const [food, setFood] = useState(foodPosition);
+  const [score, setScore] = useState(0);
 
   const displayRows = rows.map((row) => (
     <div className="boardRow">
@@ -93,6 +94,7 @@ const Game = () => {
     });
     if (snake[0].x === food.x && snake[0].y === food.y) {
       setFood(foodPosition);
+      setScore((prevScore) => prevScore + 10);
     } else if (snake.length > 2) {
       newSnake.pop();
     } else {
@@ -150,11 +152,12 @@ const Game = () => {
 
   return (
     <>
-      <div>Hi Welcome to the Snake Game</div>
-      {displayRows}
-      <button onClick={displayFood}>Food</button>
+      <div>Score : {score}</div>
+      <br />
+      <div>{displayRows}</div>
+      {/* <button onClick={displayFood}>Food</button> */}
       {/* <button onClick={displaySnake}>Food</button> */}
-      <button onClick={moveSnake}>move it move it</button>
+      {/* <button onClick={moveSnake}>move it move it</button> */}
       {/* {console.log(rows)} */}
     </>
   );
